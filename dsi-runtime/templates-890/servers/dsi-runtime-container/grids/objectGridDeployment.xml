@@ -42,7 +42,7 @@
 		</mapSet>
 	</objectgridDeployment>
 	<objectgridDeployment objectgridName="com.ibm.ia.preload">
-		<mapSet name="iaPreloadMaps" numberOfPartitions="127" numInitialContainers="3" minSyncReplicas="0" maxSyncReplicas="1" maxAsyncReplicas="1" developmentMode="false">
+		<mapSet name="iaPreloadMaps" numberOfPartitions="7" numInitialContainers="3" minSyncReplicas="0" maxSyncReplicas="1" maxAsyncReplicas="0" developmentMode="false">
 			<map ref="PreloadSummary" />
 			<map ref="PreloadBatches" />
 		</mapSet>
