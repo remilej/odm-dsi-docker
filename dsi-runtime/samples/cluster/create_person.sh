@@ -13,9 +13,11 @@ function print_usage {
 }
 
 
-DSI_HOSTNAME=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' dsi-runtime-inbound`
+#DSI_HOSTNAME=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' dsi-runtime-inbound`
+DSI_PORT=`docker inspect -f '{{ (index (index .NetworkSettings.Ports "9443/tcp") 0).HostPort }}' dsi-runtime-inbound`
 
-echo "INBOUND IP: $DSI_HOSTNAME"
+#echo "INBOUND IP: $DSI_HOSTNAME"
+echo "INBOUND PORT: $DSI_PORT"
 
 if [ -z "$1" ]; then
         PERSON="jean"
@@ -31,7 +33,7 @@ else
     sed -i "s/ID/$PERSON/" /tmp/$$.tmp
 fi
 
-URL=https://$DSI_HOSTNAME:9443/in/simple
+URL=https://localhost:$DSI_PORT/in/simple
 
 echo "Endpoint URL: $URL"
 
