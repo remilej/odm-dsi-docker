@@ -24,6 +24,13 @@ fi
 
 if [ ! -z "$2" ]; then
         DSI_CATALOG_HOSTNAME="$2"
+        if hash curl 2> /dev/null; then
+                PORT_TEST_RESULT=0
+                until [ "$PORT_TEST_RESULT" -eq 52 ] ; do
+                        sleep 3
+                        PORT_TEST_RESULT=`curl $DSI_CATALOG_HOSTNAME:2809 >&  /dev/null  ; echo  $?`
+                done
+        fi
 fi
 
 echo "The DSI template $DSI_TEMPLATE is going to be used."
