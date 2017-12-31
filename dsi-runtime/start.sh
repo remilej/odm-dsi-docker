@@ -83,6 +83,17 @@ if [ ! -z "$DSI_CATALOG_HOSTNAME" ]; then
         sed -i "s/ia.bootstrapEndpoints=localhost:2809/ia.bootstrapEndpoints=$DSI_CATALOG_HOSTNAME:2809/g" $BOOTSTRAP_FILE
 fi
 
+if [ ! -z "$2" ]; then
+        CATALOG_TEST_RESULT=0
+        until [ "$CATALOG_TEST_RESULT" -eq 1 ] ; do
+                sleep 5
+                echo Testing availability of catalog server $DSI_CATALOG_HOSTNAME before starting container
+                CATALOG_TEST_RESULT=`/opt/dsi/runtime/wlp/bin/xscmd.sh -c showPrimaryCatalogServer --catalogEndPoints $DSI_CATALOG_HOSTNAME:2809 | egrep $DSI_CATALOG_HOSTNAME.*TRUE | wc -l`
+        done
+fi
+
+
+
 echo "The IP of the DSI server is $INTERNAL_IP"
 
 if [ -f "$BOOTSTRAP_FILE" ]; then
