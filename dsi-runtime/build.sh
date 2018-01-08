@@ -57,6 +57,7 @@ cp -rp $DSI_TEMPLATES/servers "$BUILD_DIR_DSI_RUNTIME/wlp/templates/"
 
 echo "Copying docker container start script to $BUILD_DIR"
 cp "$SRC_DIR/start.sh" "$BUILD_DIR"
+cp "$SRC_DIR/jprofiler_config.xml" "$BUILD_DIR"
 
 cp "$SRC_DIR/Dockerfile" "$BUILD_DIR"
 
