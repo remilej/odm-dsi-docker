@@ -8,6 +8,21 @@
 
 set -e
 
+function jprofile_enable {
+        echo "JProfiler enable"
+
+        wget http://download-keycdn.ej-technologies.com/jprofiler/jprofiler_linux_9_2.tar.gz -P /tmp/
+
+        pushd /tmp
+        tar -xvf jprofiler_linux_9_2.tar.gz
+        popd
+
+        rm /tmp/jprofiler_linux_9_2.tar.gz
+
+        JPROFILER_AGENT="-agentpath:/tmp/jprofiler9/bin/linux-x64/libjprofilerti.so=offline,id=108,config=/root/jprofiler_config.xml"
+        echo "$JPROFILER_AGENT" >> /opt/dsi/runtime/wlp/usr/servers/$DSI_TEMPLATE/jvm.options
+}
+
 DSI_HOME="/opt/dsi"
 
 if [ -z "$JAVA_HOME" ]; then
@@ -55,6 +70,9 @@ if [ ! -f "$SRV_XML" ]; then
                 sed -i "s/\$DSI_DB_PASSWORD/$DSI_DB_PASSWORD/g" "$SRV_XML"
         fi
 
+        if [ ! -z "$DSI_JPROFILER" ]; then
+                jprofile_enable
+        fi
 else
         echo "$SRV_XML already exist"
 fi
@@ -67,7 +85,9 @@ fi
 
 echo "The IP of the DSI server is $INTERNAL_IP"
 
-sed -i "s/ia\.host\=localhost/ia\.host\=$INTERNAL_IP/" $BOOTSTRAP_FILE
-echo "Internal IP: $INTERNAL_IP"
+if [ -f "$BOOTSTRAP_FILE" ]; then
+        sed -i "s/ia\.host\=localhost/ia\.host\=$INTERNAL_IP/" $BOOTSTRAP_FILE
+        echo "Internal IP: $INTERNAL_IP"
+fi
 
 /opt/dsi/runtime/wlp/bin/server run $DSI_TEMPLATE
