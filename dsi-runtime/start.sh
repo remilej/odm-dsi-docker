@@ -4,6 +4,7 @@
 # It creates the server configuration files from a WLP configuration template.
 # The first argument of the script is the name of the template. By default,
 # it is 'dsi-runtime'.
+# The second argument is the hostname of the catalog server.
 
 set -e
 
