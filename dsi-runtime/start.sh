@@ -42,18 +42,19 @@ if [ ! -f "$SRV_XML" ]; then
         echo "" >> /opt/dsi/runtime/wlp/usr/servers/$DSI_TEMPLATE/server.env
         echo "JAVA_HOME=$JAVA_HOME" >> /opt/dsi/runtime/wlp/usr/servers/$DSI_TEMPLATE/server.env
 
-        if [ ! -z "DSI_DB_HOSTNAME" ]; then
+        if [ ! -z "$DSI_DB_HOSTNAME" ]; then
                 echo "Update DSI_DB_HOSTNAME to $DSI_DB_HOSTNAME in $SRV_XML"
                 sed -i "s/\$DSI_DB_HOSTNAME/$DSI_DB_HOSTNAME/g" "$SRV_XML"
         fi
-        if [ ! -z "DSI_DB_USER" ]; then
+        if [ ! -z "$DSI_DB_USER" ]; then
                 echo "Update DSI_DB_USER to $DSI_DB_USER in $SRV_XML"
                 sed -i "s/\$DSI_DB_USER/$DSI_DB_USER/g" "$SRV_XML"
         fi
-        if [ ! -z "DSI_DB_PASSWORD" ]; then
+        if [ ! -z "$DSI_DB_PASSWORD" ]; then
                 echo "Update DSI_DB_PASSWORD to $DSI_DB_PASSWORD in $SRV_XML"
                 sed -i "s/\$DSI_DB_PASSWORD/$DSI_DB_PASSWORD/g" "$SRV_XML"
         fi
+
 else
         echo "$SRV_XML already exist"
 fi
