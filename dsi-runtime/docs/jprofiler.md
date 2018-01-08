@@ -1,18 +1,21 @@
 # How to use JProfiler9 to profile a DSI Runtime container
 
-Build a DSI runtime image containing the OpenJDK:
+## Offline profiling
 
-```bash
-export DSI_USEOPENJDK=1
-./build.sh $DSI_HOME
+In order to create a Docker container with a DSI runtime which is periodically
+generating JProfiler snapshots, you just have to define the environment variable
+DSI_JPROFILER:
+
+```
+docker run -e DSI_JPROFILER=true dsi-runtime
 ```
 
-Note: The openjdk is not officially supported by DSI Runtime.
+## Live profiling of a running DSI runtime
 
-Run a DSI Runtime container using the OpenJDK:
+Run a DSI Runtime container using the OpenJDK and bind the port 8849 to the docker host:
 
 ```bash
-docker run -p9080:9080 -p9443:9443 -p8849 -e JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64 -ti --name my-dsi-runtime dsi-runtime
+docker run -p9080:9080 -p9443:9443 -p8849 -ti --name my-dsi-runtime dsi-runtime-openjdk
 ```
 
 Installation of the JProfiler agent:
