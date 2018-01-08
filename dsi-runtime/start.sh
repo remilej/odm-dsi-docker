@@ -64,12 +64,29 @@ if [ ! -z "DSI_CATALOG_HOSTNAME" ]; then
 fi
 
 if [ ! -z "$2" ]; then
-        CATALOG_TEST_RESULT=0
-        until [ "$CATALOG_TEST_RESULT" -eq 1 ] ; do
-                sleep 5
-                echo Testing availability of catalog server $DSI_CATALOG_HOSTNAME before starting container
-                CATALOG_TEST_RESULT=`/opt/dsi/runtime/wlp/bin/xscmd.sh -c showPrimaryCatalogServer --catalogEndPoints $DSI_CATALOG_HOSTNAME:2809 | egrep $DSI_CATALOG_HOSTNAME.*TRUE | wc -l`
-        done
+        if [ "$DSI_TEMPLATE" == "dsi-runtime-container" ] ; then
+                CATALOG_TEST_RESULT=0
+                until [ "$CATALOG_TEST_RESULT" -eq 1 ] ; do
+                        sleep 5
+                        echo Testing availability of catalog server $DSI_CATALOG_HOSTNAME before starting runtime container
+                        CATALOG_TEST_RESULT=`/opt/dsi/runtime/wlp/bin/xscmd.sh -c showPrimaryCatalogServer --catalogEndPoints $DSI_CATALOG_HOSTNAME:2809 | egrep $DSI_CATALOG_HOSTNAME.*TRUE | wc -l`
+                done
+        else
+                CONTAINER_TEST_RESULT=0
+                until [ "$CONTAINER_TEST_RESULT" -eq 1 ] ; do
+                        sleep 10 
+                        echo "Testing availability of runtime containers before starting connectivity (looking for the first container referenced by catalog)"
+                        CONTAINER=`/opt/dsi/runtime/wlp/bin/xscmd.sh -c getStatsSpec --catalogEndPoints $DSI_CATALOG_HOSTNAME:2809 | egrep dsi-runtime-container | sed "s/-dsi-runtime-container.*$//"| head -1`
+                        CONTAINER_TEST_RESULT=`echo "$CONTAINER" | egrep "\." | wc -l`
+                done
+                echo found container $CONTAINER
+                GRID_ONLINE=0
+                until [ "$GRID_ONLINE" -eq 1 ] ; do
+                        sleep 10
+                        echo "Testing availability of runtime containers before starting connectivity (checking that grid is online)"
+                        GRID_ONLINE=`/opt/dsi/runtime/ia/bin/serverManager isonline --host=$CONTAINER --disableSSLHostnameVerification=true --disableServerCertificateVerification=true | egrep "is online" | wc -l`
+                done        
+        fi
 fi
 
 
