@@ -58,7 +58,7 @@ else
         echo "$SRV_XML already exist"
 fi
 
-if [ ! -z "DSI_CATALOG_HOSTNAME" ]; then
+if [ ! -z "$DSI_CATALOG_HOSTNAME" ]; then
         BOOTSTRAP_FILE=/opt/dsi/runtime/wlp/usr/servers/$DSI_TEMPLATE/bootstrap.properties
         echo "Modifying $BOOTSTRAP_FILE"
         sed -i "s/ia.bootstrapEndpoints=localhost:2809/ia.bootstrapEndpoints=$DSI_CATALOG_HOSTNAME:2809/g" $BOOTSTRAP_FILE
