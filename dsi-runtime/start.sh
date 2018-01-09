@@ -84,11 +84,13 @@ if [ ! -z "$DSI_CATALOG_HOSTNAME" ]; then
 fi
 
 if [ ! -z "$2" ]; then
-        CATALOG_TEST_RESULT=0
-        until [ "$CATALOG_TEST_RESULT" -eq 1 ] ; do
-                sleep 5
+        while true ; do
                 echo Testing availability of catalog server $DSI_CATALOG_HOSTNAME before starting container
                 CATALOG_TEST_RESULT=`/opt/dsi/runtime/wlp/bin/xscmd.sh -c showPrimaryCatalogServer --catalogEndPoints $DSI_CATALOG_HOSTNAME:2809 | egrep $DSI_CATALOG_HOSTNAME.*TRUE | wc -l`
+                if [ "$CATALOG_TEST_RESULT" -eq 1 ] ; then
+                        break
+                fi
+                sleep 5
         done
 fi
 
