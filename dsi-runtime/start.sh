@@ -91,6 +91,7 @@ if [ ! -z "$2" ]; then
                 if [ "$CATALOG_TEST_RESULT" -eq 1 ] ; then
                         break
                 fi
+                echo Catalog is not yet online, holding for 5 seconds.
                 sleep 5
         done
 fi
@@ -103,6 +104,7 @@ if [ ! -z "$3" ]; then
                  if [ "$GRID_ONLINE" -eq 1 ]; then
                          break
                  fi
+                 echo Grid is not yet available, holding for 10 seconds.
                  sleep 10
          done
 fi
