@@ -4,8 +4,6 @@ services:
                 container_name: dsi-runtime-catalog
                 image: $DSI_IMG
                 command: ["/root/start.sh", "dsi-runtime-catalog"]
-                ports:
-                       - "2809:2809"
 
         dsi-runtime-container1:
                 container_name: dsi-runtime-container1
