@@ -26,7 +26,7 @@ if [ ! -d "$DSI_HOME_RUNTIME" ]; then
         exit 1
 fi
 
-BUILD_DIR="build"
+BUILD_DIR="/tmp/DSIonDockerBuild"
 BUILD_DIR_DSI="$BUILD_DIR/opt/dsi"
 BUILD_DIR_DSI_RUNTIME="$BUILD_DIR_DSI/runtime"
 SRC_DIR=`dirname $0`
@@ -71,3 +71,6 @@ if [ -z "$2" ]; then
 else
         docker-compose build "$2"
 fi
+
+echo "Removing temporary build dir"
+rm -rf "$BUILD_DIR"
